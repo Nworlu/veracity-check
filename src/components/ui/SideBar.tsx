@@ -1,16 +1,27 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { links } from "../../data";
+import { useAuth } from "../../context/AuthProvider";
+import { useLogoutMutation } from "../../hook/auth.hook";
 
 const SideBar = () => {
   const pathname = useLocation().pathname;
-  const navigate = useNavigate();
+//   const navigate = useNavigate();
+  const { user } = useAuth()
+  const logoutMutation =  useLogoutMutation()
 
   const handleLogout = () => {
-    // Clear any tokens or session info
-    localStorage.removeItem("token"); // or whatever you're storing
-    // Navigate to login or landing page
-    navigate("/auth");
+    logoutMutation.mutate()
   };
+
+
+  const filteredLinks = links.filter((link) => {
+    if (user?.userType === "user") {
+      return link.name === "Documents" || link.name === "Profile";
+    } else if (user?.userType === "admin") {
+      return link.name !== "Documents";
+    }
+    return false;
+  });
 
   return (
     <aside className="h-screen w-64 p-4 relative z-10 flex flex-col justify-between">
@@ -21,7 +32,7 @@ const SideBar = () => {
         </h1>
         <div className="mt-9">
           <ul className="flex flex-col gap-7">
-            {links.map((link, indx) => (
+            {filteredLinks.map((link, indx) => (
               <li key={indx}>
                 <Link
                   to={link.href}
@@ -46,7 +57,7 @@ const SideBar = () => {
           onClick={handleLogout}
           className="w-full py-2 px-4 bg-red-100 text-red-600 rounded-md hover:bg-red-200 transition"
         >
-          Logout
+          {logoutMutation.isPending? "Logging out....." : "Logout"}
         </button>
 
         <p className="text-sm text-gray-500 text-center">

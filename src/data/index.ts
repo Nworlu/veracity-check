@@ -55,31 +55,31 @@ export const DocumentsData: DocumentsType[] = [
 ];
 
 export const DocumentsColumns = [
-  documentColumnHelper.accessor("fileName", {
-    header: "File Name",
+  documentColumnHelper.accessor("fullName", {
+    header: "Upload By",
     cell: (info) => info.getValue(),
   }),
-  documentColumnHelper.accessor("fileSize", {
-    header: "File Size",
+//   documentColumnHelper.accessor("fileSize", {
+//     header: "File Size",
+//     cell: (info) => info.getValue(),
+//   }),
+  documentColumnHelper.accessor("documentType", {
+    header: "Document Type",
     cell: (info) => info.getValue(),
   }),
-  documentColumnHelper.accessor("fileType", {
-    header: "File Type",
-    cell: (info) => info.getValue(),
-  }),
-  documentColumnHelper.accessor("uploadDate", {
+  documentColumnHelper.accessor("createdAt", {
     header: "Upload Date",
-    cell: (info) => info.getValue(),
+    cell: (info) => info.getValue()?.split("T")[0],
   }),
   documentColumnHelper.accessor("status", {
     header: "Status",
     cell: (info) => info.getValue(),
   }),
-  documentColumnHelper.accessor("verificationDate", {
+  documentColumnHelper.accessor("updatedAt", {
     header: "Verification Date",
-    cell: (info) => info.getValue(),
+    cell: (info) => info.getValue()?.split("T")[0],
   }),
-  documentColumnHelper.accessor("verificationStatus", {
+  documentColumnHelper.accessor("status", {
     header: "Verification Status",
     cell: (info) => info.getValue(),
   }),
@@ -103,11 +103,11 @@ firstName:"John",
 ];
 
 export const UserColumns = [
-  userColumnHelper.accessor("firstName", {
+  userColumnHelper.accessor("firstname", {
     header: "First Name",
     cell: (info) => info.getValue(),
   }),
-  userColumnHelper.accessor("lastName", {
+  userColumnHelper.accessor("lastname", {
     header: "Last Name",
     cell: (info) => info.getValue(),
   }),

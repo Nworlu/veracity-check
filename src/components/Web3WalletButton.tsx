@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Wallet } from "lucide-react";
 import { Button } from "./ui/Button";
+import { useAuth } from "../context/AuthProvider";
 
 declare global {
   interface Window {
@@ -11,10 +12,11 @@ declare global {
 }
 
 const Web3WalletButton: React.FC = () => {
-  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+//   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [connecting, setConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { setWalletAddress,walletAddress } = useAuth()
 
   const connectWallet = async () => {
     setConnecting(true);
@@ -27,9 +29,10 @@ const Web3WalletButton: React.FC = () => {
         });
         if (accounts && accounts[0]) {
           setWalletAddress(accounts[0]);
+          
           // Simple animation: wait 1s, then redirect
           setTimeout(() => {
-            navigate("/auth");
+            navigate("/auth/login");
           }, 1000);
         }
       } catch (err: any) {
