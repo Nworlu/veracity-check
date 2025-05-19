@@ -33,7 +33,7 @@ const [isRejecting, setIsRejecting] = useState(false);
   
     try {
       await verifyIdentityMutation.mutateAsync({
-        body: status,
+        body: { status },
         id: data._id,
       });
       refetch();

@@ -21,7 +21,7 @@ export const getAllAdminDocumentsService = async (): Promise<any> => {
     return data ; // Return the data only
 }
 export const verifyDocumentIdentity = async (id:string,body:any): Promise<any> => {
-    const response = await axiosInstance.post<any>(ENDPOINT_URL.admin.verifyIdentity(id),body);
+    const response = await axiosInstance.patch<any>(ENDPOINT_URL.admin.verifyIdentity(id),body);
     const data = response.data || response 
     
     console.log(data, "response from gat all documents");

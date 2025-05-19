@@ -30,7 +30,7 @@ const LoginPage = () => {
         className="bg-white/90 backdrop-blur-lg p-8 sm:p-10 rounded-2xl shadow-2xl w-full max-w-sm space-y-5"
       >
         <div className="text-center">
-          <h2 className="text-4xl font-bold text-[#7E69AB]">Sign Up</h2>
+          <h2 className="text-4xl font-bold text-[#7E69AB]">Login </h2>
           <p className="text-sm text-gray-600 mt-1">
             Welcome back please login to your account
           </p>
@@ -81,7 +81,7 @@ const LoginPage = () => {
           disabled={loginMutation.isPending}
           className="w-full bg-[#9b87f5] hover:bg-[#7E69AB] text-white font-semibold py-2.5 rounded-lg shadow transition"
         >
-          {loginMutation.isPending ? "Signing up..." : "Sign Up"}
+          {loginMutation.isPending ? "Loggin in ..." : "Login"}
         </button>
 
         <p className="text-center text-sm text-gray-600">

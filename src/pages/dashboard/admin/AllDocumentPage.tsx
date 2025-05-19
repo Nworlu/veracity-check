@@ -1,11 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { createColumnHelper } from "@tanstack/react-table";
-// import type { ColumnDef } from "@tanstack/react-table";
+
 import TableLayout from "../../../components/ui/table-layout";
 import { DocumentsColumns } from "../../../data";
-// import type { DocumentsType } from "../../../types";
 import { useGetAllAdminDocuments } from "../../../hook/admin.hook";
-// import type { DocumentsType } from "../../types";
 
 const AdminAllDocumentsPage = () => {
     const { data, isLoading } = useGetAllAdminDocuments(true);

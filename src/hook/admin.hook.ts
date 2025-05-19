@@ -36,7 +36,8 @@ export  const useGetAllAdminDocuments = (enabled: boolean) => {
 export const useVerifyIdentityMutation = () => {
     // const { setUserData } = useAuth()
   return useMutation({
-    mutationFn: ({id,body}:{id:string,body:any}) => verifyDocumentIdentity(id,body),
+    mutationFn: ({ id, body }: { id: string; body: { status: string } }) =>
+      verifyDocumentIdentity(id, body),
     onMutate: () => console.log("verifying document..."),
     onSuccess: (data) => {
       console.log(data, "data sign upppppppp");
