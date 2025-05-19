@@ -2,11 +2,14 @@ import { useParams } from "react-router-dom";
 import { useGetUserSingleDocument } from "../../hook/identity.hook";
 import { useVerifyIdentityMutation } from "../../hook/admin.hook";
 import { useAuth } from "../../context/AuthProvider";
+import { useState } from "react";
 
 const DocumentDetailPage = () => {
   const { id } = useParams();
   const { data, isLoading, refetch } = useGetUserSingleDocument(id as string);
-  const { user } = useAuth()
+  const [isApproving, setIsApproving] = useState(false);
+const [isRejecting, setIsRejecting] = useState(false);
+  const { user } = useAuth();
   console.log({ id });
 
   // Temporary hardcoded document, replace with `data` from API when ready
@@ -19,17 +22,29 @@ const DocumentDetailPage = () => {
     status: "Verified",
     fileUrl: "/example.pdf",
   };
-  const verifyIdentityMutation =useVerifyIdentityMutation()
+  const verifyIdentityMutation = useVerifyIdentityMutation();
 
-  const handleVerify = (status:"approved" | "rejected") => {
-    verifyIdentityMutation.mutateAsync({
-      body:status,
-      id: data._id,
-    }).then(() => {
-      refetch()
-    })
-  }
-
+  const handleVerify = async (status: "approved" | "rejected") => {
+    if (status === "approved") {
+      setIsApproving(true);
+    } else {
+      setIsRejecting(true);
+    }
+  
+    try {
+      await verifyIdentityMutation.mutateAsync({
+        body: status,
+        id: data._id,
+      });
+      refetch();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsApproving(false);
+      setIsRejecting(false);
+    }
+  };
+  
 
   if (isLoading) {
     return (
@@ -39,11 +54,12 @@ const DocumentDetailPage = () => {
     );
   }
 
-
   return (
     <div className="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-xl mt-6">
       <div className="mb-4">
-        <h1 className="text-3xl font-bold text-gray-800">{document.title} {data?._user?.slice(0,7)}......</h1>
+        <h1 className="text-3xl font-bold text-gray-800">
+          {document.title} {data?._user?.slice(0, 7)}......
+        </h1>
         <p className="text-sm text-gray-500 mt-1">
           Uploaded by <span className="font-medium">{data.fullName}</span> on{" "}
           {data.createdAt?.split("T")[0]}{" "}
@@ -55,7 +71,9 @@ const DocumentDetailPage = () => {
           className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
             data.status === "approved"
               ? "bg-green-100 text-green-700"
-              : data.status === "pending"? "bg-yellow-100 text-yellow-700" : "bg-red-100 text-red-700"
+              : data.status === "pending"
+              ? "bg-yellow-100 text-yellow-700"
+              : "bg-red-100 text-red-700"
           }`}
         >
           {data.status}
@@ -66,13 +84,17 @@ const DocumentDetailPage = () => {
         <h2 className="text-lg font-semibold text-gray-700 mb-2">
           Document Type
         </h2>
-        <p className="text-gray-600 leading-relaxed capitalize">{data.documentType}</p>
+        <p className="text-gray-600 leading-relaxed capitalize">
+          {data.documentType}
+        </p>
       </div>
       <div className="mb-6">
         <h2 className="text-lg font-semibold text-gray-700 mb-2">
-        User BlockChain Hash
+          User BlockChain Hash
         </h2>
-        <p className="text-gray-600 leading-relaxed capitalize">{data.blockchainHash}</p>
+        <p className="text-gray-600 leading-relaxed capitalize">
+          {data.blockchainHash}
+        </p>
       </div>
 
       <div className="mb-6">
@@ -89,18 +111,26 @@ const DocumentDetailPage = () => {
         </a>
       </div>
 
-{user?.userType === "admin" && 
-      <div className="flex gap-4 mt-8">
-        <button disabled={verifyIdentityMutation.isPending} onClick={()=> handleVerify('approved')} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md">
-         {verifyIdentityMutation.isPending ? "Verifying...." : "Approve"}
-        </button>
-        <button disabled={verifyIdentityMutation.isPending} onClick={()=> handleVerify('rejected')} className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md">
-         {verifyIdentityMutation.isPending ? "Rejecting...." : "Reject"}
-        </button>
-       
-      </div>
+      {user?.userType === "admin" && (
+        <div className="flex gap-4 mt-8">
+       <button
+  disabled={isApproving || isRejecting}
+  onClick={() => handleVerify("approved")}
+  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md"
+>
+  {isApproving ? "Verifying..." : "Approve"}
+</button>
 
-}
+<button
+  disabled={isApproving || isRejecting}
+  onClick={() => handleVerify("rejected")}
+  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
+>
+  {isRejecting ? "Rejecting..." : "Reject"}
+</button>
+
+        </div>
+      )}
     </div>
   );
 };

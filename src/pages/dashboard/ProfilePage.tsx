@@ -50,6 +50,8 @@ const ProfilePage = () => {
     }
   };
 
+  console.log(user?.image)
+
   return (
     <div className="min-h-screen p-8">
       <div className="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg">
@@ -67,7 +69,7 @@ const ProfilePage = () => {
             />
           ):  <img
             src="https://via.placeholder.com/150"
-          alt="User Avatar"
+          alt="User "
           className="w-20 h-20 rounded-full object-cover border"
         />}
             <button
