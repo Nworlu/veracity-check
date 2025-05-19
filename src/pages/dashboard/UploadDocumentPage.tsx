@@ -71,13 +71,13 @@ const UploadDocument = () => {
     );
   }
 
-  if (showSuccess) {
-    return (
-      <p className="text-green-600 text-sm mt-2 animate-pulse text-center">
-        ✅ Document uploaded successfully!
-      </p>
-    );
-  }
+  // if (showSuccess) {
+  //   return (
+  //     <p className="text-green-600 text-sm mt-2 animate-pulse text-center">
+  //       ✅ Document uploaded successfully!
+  //     </p>
+  //   );
+  // }
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-8">
